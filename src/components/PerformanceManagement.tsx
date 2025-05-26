@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Container, Row, Col, Card, Table, Button, Modal, Form, Badge, ProgressBar, Alert } from 'react-bootstrap';
-import { FaChartLine, FaStar, FaTarget, FaPlus, FaEye, FaEdit, FaTrash } from 'react-icons/fa';
+import { FaChartLine, FaStar, FaBullseye, FaPlus, FaEye, FaEdit, FaTrash } from 'react-icons/fa';
 
 const PerformanceManagement = () => {
   const [showModal, setShowModal] = useState(false);
@@ -220,7 +220,7 @@ const PerformanceManagement = () => {
           <Card className="border-0 shadow-sm" style={{background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)'}}>
             <Card.Body className="text-white">
               <div className="d-flex align-items-center">
-                <FaTarget size={30} className="me-3 opacity-75" />
+                <FaBullseye size={30} className="me-3 opacity-75" />
                 <div>
                   <div className="h4 fw-bold mb-0">{performanceStats.completed}</div>
                   <div className="small opacity-75">Completed Reviews</div>
