@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Container, Row, Col, Card, Table, Button, Modal, Form, Badge, ProgressBar, Alert } from 'react-bootstrap';
-import { FaGraduationCap, FaPlus, FaEye, FaEdit, FaBook, FaCertificate } from 'react-icons/fa';
+import { FaGraduationCap, FaPlus, FaEye, FaEdit, FaBook, FaCertificate, FaTrash } from 'react-icons/fa';
 
 const TrainingManagement = () => {
   const [showModal, setShowModal] = useState(false);
@@ -129,6 +129,38 @@ const TrainingManagement = () => {
   const handleCloseModal = () => {
     setShowModal(false);
     setSelectedTraining(null);
+  };
+
+  const handleSave = () => {
+    if (modalType === 'add') {
+      const newId = Math.max(...trainings.map(t => t.id)) + 1;
+      const newTraining = {
+        id: newId,
+        ...formData,
+        maxParticipants: parseInt(formData.maxParticipants),
+        participants: 0,
+        completionRate: 0,
+        status: 'Upcoming'
+      };
+      setTrainings(prev => [...prev, newTraining]);
+    } else if (modalType === 'edit') {
+      setTrainings(prev => prev.map(training => 
+        training.id === selectedTraining.id 
+          ? { 
+              ...training, 
+              ...formData,
+              maxParticipants: parseInt(formData.maxParticipants)
+            }
+          : training
+      ));
+    }
+    handleCloseModal();
+  };
+
+  const handleDelete = (id) => {
+    if (window.confirm('Are you sure you want to delete this training program?')) {
+      setTrainings(prev => prev.filter(training => training.id !== id));
+    }
   };
 
   const getStatusBadge = (status) => {
@@ -296,6 +328,13 @@ const TrainingManagement = () => {
                             onClick={() => handleShowModal('edit', training)}
                           >
                             <FaEdit />
+                          </Button>
+                          <Button 
+                            variant="outline-danger" 
+                            size="sm"
+                            onClick={() => handleDelete(training.id)}
+                          >
+                            <FaTrash />
                           </Button>
                         </div>
                       </td>
@@ -516,7 +555,7 @@ const TrainingManagement = () => {
             {modalType === 'view' ? 'Close' : 'Cancel'}
           </Button>
           {modalType !== 'view' && (
-            <Button variant="primary">
+            <Button variant="primary" onClick={handleSave}>
               {modalType === 'add' ? 'Create Program' : 'Save Changes'}
             </Button>
           )}

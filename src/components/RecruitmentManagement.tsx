@@ -107,6 +107,33 @@ const RecruitmentManagement = () => {
     setSelectedCandidate(null);
   };
 
+  const handleSave = () => {
+    if (modalType === 'add') {
+      const newId = Math.max(...candidates.map(c => c.id)) + 1;
+      const newCandidate = {
+        id: newId,
+        ...formData,
+        status: 'Applied',
+        applicationDate: new Date().toISOString().split('T')[0],
+        resume: `${formData.name.toLowerCase().replace(' ', '_')}_resume.pdf`
+      };
+      setCandidates(prev => [...prev, newCandidate]);
+    } else if (modalType === 'edit') {
+      setCandidates(prev => prev.map(candidate => 
+        candidate.id === selectedCandidate.id 
+          ? { ...candidate, ...formData }
+          : candidate
+      ));
+    }
+    handleCloseModal();
+  };
+
+  const handleDelete = (id) => {
+    if (window.confirm('Are you sure you want to delete this candidate?')) {
+      setCandidates(prev => prev.filter(candidate => candidate.id !== id));
+    }
+  };
+
   const handleStatusChange = (id, newStatus) => {
     setCandidates(prev => 
       prev.map(candidate => 
@@ -294,6 +321,13 @@ const RecruitmentManagement = () => {
                       >
                         <FaEdit />
                       </Button>
+                      <Button 
+                        variant="outline-danger" 
+                        size="sm"
+                        onClick={() => handleDelete(candidate.id)}
+                      >
+                        <FaTrash />
+                      </Button>
                       <Button variant="outline-info" size="sm">
                         <FaDownload />
                       </Button>
@@ -475,7 +509,7 @@ const RecruitmentManagement = () => {
             {modalType === 'view' ? 'Close' : 'Cancel'}
           </Button>
           {modalType !== 'view' && (
-            <Button variant="primary">
+            <Button variant="primary" onClick={handleSave}>
               {modalType === 'add' ? 'Add Candidate' : 'Save Changes'}
             </Button>
           )}

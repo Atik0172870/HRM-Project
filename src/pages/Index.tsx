@@ -6,6 +6,7 @@ import Dashboard from '../components/Dashboard';
 import EmployeeManagement from '../components/EmployeeManagement';
 import AttendanceManagement from '../components/AttendanceManagement';
 import PayrollManagement from '../components/PayrollManagement';
+import BenefitsManagement from '../components/BenefitsManagement';
 import LeaveManagement from '../components/LeaveManagement';
 import PerformanceManagement from '../components/PerformanceManagement';
 import RecruitmentManagement from '../components/RecruitmentManagement';
@@ -25,6 +26,8 @@ const Index = () => {
         return <AttendanceManagement />;
       case 'payroll':
         return <PayrollManagement />;
+      case 'benefits':
+        return <BenefitsManagement />;
       case 'leave':
         return <LeaveManagement />;
       case 'performance':

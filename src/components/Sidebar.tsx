@@ -10,7 +10,8 @@ import {
   FaChartLine, 
   FaUserPlus, 
   FaGraduationCap, 
-  FaFileAlt 
+  FaFileAlt,
+  FaHeartbeat 
 } from 'react-icons/fa';
 
 interface SidebarProps {
@@ -24,6 +25,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeModule, setActiveModule }) => {
     { key: 'employees', icon: FaUsers, label: 'Employees' },
     { key: 'attendance', icon: FaClock, label: 'Attendance' },
     { key: 'payroll', icon: FaMoneyBillWave, label: 'Payroll' },
+    { key: 'benefits', icon: FaHeartbeat, label: 'Benefits' },
     { key: 'leave', icon: FaCalendarAlt, label: 'Leave Management' },
     { key: 'performance', icon: FaChartLine, label: 'Performance' },
     { key: 'recruitment', icon: FaUserPlus, label: 'Recruitment' },

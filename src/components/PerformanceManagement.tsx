@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Container, Row, Col, Card, Table, Button, Modal, Form, Badge, ProgressBar, Alert } from 'react-bootstrap';
-import { FaChartLine, FaStar, FaTarget, FaPlus, FaEye, FaEdit } from 'react-icons/fa';
+import { FaChartLine, FaStar, FaTarget, FaPlus, FaEye, FaEdit, FaTrash } from 'react-icons/fa';
 
 const PerformanceManagement = () => {
   const [showModal, setShowModal] = useState(false);
@@ -72,6 +72,7 @@ const PerformanceManagement = () => {
   ]);
 
   const [formData, setFormData] = useState({
+    employeeId: '',
     technical: '',
     communication: '',
     leadership: '',
@@ -86,6 +87,7 @@ const PerformanceManagement = () => {
     setSelectedEmployee(employee);
     if (employee && type === 'edit') {
       setFormData({
+        employeeId: employee.id.toString(),
         technical: employee.ratings.technical.toString(),
         communication: employee.ratings.communication.toString(),
         leadership: employee.ratings.leadership.toString(),
@@ -96,6 +98,7 @@ const PerformanceManagement = () => {
       });
     } else {
       setFormData({
+        employeeId: '',
         technical: '',
         communication: '',
         leadership: '',
@@ -111,6 +114,59 @@ const PerformanceManagement = () => {
   const handleCloseModal = () => {
     setShowModal(false);
     setSelectedEmployee(null);
+  };
+
+  const handleDelete = (id) => {
+    if (window.confirm('Are you sure you want to delete this performance review?')) {
+      setPerformanceData(prev => prev.filter(emp => emp.id !== id));
+    }
+  };
+
+  const handleSave = () => {
+    const ratings = {
+      technical: parseFloat(formData.technical),
+      communication: parseFloat(formData.communication),
+      leadership: parseFloat(formData.leadership),
+      productivity: parseFloat(formData.productivity),
+      teamwork: parseFloat(formData.teamwork)
+    };
+    
+    const overallRating = Object.values(ratings).reduce((sum, rating) => sum + rating, 0) / 5;
+    const [completed, total] = formData.goals.split('/').map(num => parseInt(num));
+
+    if (modalType === 'add') {
+      const newId = Math.max(...performanceData.map(p => p.id)) + 1;
+      const newPerformance = {
+        id: newId,
+        name: `Employee ${newId}`,
+        department: 'Engineering',
+        position: 'Software Engineer',
+        overallRating,
+        goalsCompleted: completed || 0,
+        totalGoals: total || 10,
+        reviewPeriod: '2024 Q1',
+        lastReviewDate: new Date().toISOString().split('T')[0],
+        ratings,
+        feedback: formData.feedback,
+        status: 'Completed'
+      };
+      setPerformanceData(prev => [...prev, newPerformance]);
+    } else if (modalType === 'edit') {
+      setPerformanceData(prev => prev.map(emp => 
+        emp.id === selectedEmployee.id 
+          ? {
+              ...emp,
+              overallRating,
+              goalsCompleted: completed || emp.goalsCompleted,
+              totalGoals: total || emp.totalGoals,
+              ratings,
+              feedback: formData.feedback,
+              lastReviewDate: new Date().toISOString().split('T')[0]
+            }
+          : emp
+      ));
+    }
+    handleCloseModal();
   };
 
   const getRatingColor = (rating) => {
@@ -280,6 +336,13 @@ const PerformanceManagement = () => {
                             onClick={() => handleShowModal('edit', employee)}
                           >
                             <FaEdit />
+                          </Button>
+                          <Button 
+                            variant="outline-danger" 
+                            size="sm"
+                            onClick={() => handleDelete(employee.id)}
+                          >
+                            <FaTrash />
                           </Button>
                         </div>
                       </td>
@@ -492,6 +555,15 @@ const PerformanceManagement = () => {
                 </Form.Select>
               </Form.Group>
               <Form.Group className="mb-3">
+                <Form.Label>Goals Progress (Completed/Total)</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={formData.goals}
+                  onChange={(e) => setFormData({...formData, goals: e.target.value})}
+                  placeholder="e.g., 8/10"
+                />
+              </Form.Group>
+              <Form.Group className="mb-3">
                 <Form.Label>Feedback & Comments</Form.Label>
                 <Form.Control
                   as="textarea"
@@ -509,7 +581,7 @@ const PerformanceManagement = () => {
             {modalType === 'view' ? 'Close' : 'Cancel'}
           </Button>
           {modalType !== 'view' && (
-            <Button variant="primary">
+            <Button variant="primary" onClick={handleSave}>
               {modalType === 'add' ? 'Save Review' : 'Update Review'}
             </Button>
           )}
