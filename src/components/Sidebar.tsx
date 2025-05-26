@@ -11,7 +11,12 @@ import {
   FaUserPlus, 
   FaGraduationCap, 
   FaFileAlt,
-  FaHeartbeat 
+  FaHeartbeat,
+  FaFile,
+  FaClipboardCheck,
+  FaShieldAlt,
+  FaComments,
+  FaDollarSign 
 } from 'react-icons/fa';
 
 interface SidebarProps {
@@ -22,15 +27,20 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ activeModule, setActiveModule }) => {
   const menuItems = [
     { key: 'dashboard', icon: FaTachometerAlt, label: 'Dashboard' },
-    { key: 'employees', icon: FaUsers, label: 'Employees' },
+    { key: 'employees', icon: FaUsers, label: 'Employee Management' },
+    { key: 'documents', icon: FaFile, label: 'Document Management' },
+    { key: 'onboarding', icon: FaClipboardCheck, label: 'Onboarding' },
     { key: 'attendance', icon: FaClock, label: 'Attendance' },
     { key: 'payroll', icon: FaMoneyBillWave, label: 'Payroll' },
+    { key: 'compensation', icon: FaDollarSign, label: 'Compensation' },
     { key: 'benefits', icon: FaHeartbeat, label: 'Benefits' },
     { key: 'leave', icon: FaCalendarAlt, label: 'Leave Management' },
     { key: 'performance', icon: FaChartLine, label: 'Performance' },
     { key: 'recruitment', icon: FaUserPlus, label: 'Recruitment' },
     { key: 'training', icon: FaGraduationCap, label: 'Training' },
-    { key: 'reports', icon: FaFileAlt, label: 'Reports' },
+    { key: 'engagement', icon: FaComments, label: 'Employee Engagement' },
+    { key: 'compliance', icon: FaShieldAlt, label: 'Compliance' },
+    { key: 'reports', icon: FaFileAlt, label: 'Reports & Analytics' },
   ];
 
   return (
