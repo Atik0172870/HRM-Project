@@ -6,7 +6,7 @@ import { FaChartLine, FaStar, FaTarget, FaPlus, FaEye, FaEdit, FaTrash } from 'r
 const PerformanceManagement = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState('add');
-  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [selectedEmployee, setSelectedEmployee] = useState<any>(null);
 
   const [performanceData, setPerformanceData] = useState([
     {
@@ -82,7 +82,7 @@ const PerformanceManagement = () => {
     goals: ''
   });
 
-  const handleShowModal = (type, employee = null) => {
+  const handleShowModal = (type: string, employee: any = null) => {
     setModalType(type);
     setSelectedEmployee(employee);
     if (employee && type === 'edit') {
@@ -116,7 +116,7 @@ const PerformanceManagement = () => {
     setSelectedEmployee(null);
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = (id: number) => {
     if (window.confirm('Are you sure you want to delete this performance review?')) {
       setPerformanceData(prev => prev.filter(emp => emp.id !== id));
     }
@@ -169,15 +169,15 @@ const PerformanceManagement = () => {
     handleCloseModal();
   };
 
-  const getRatingColor = (rating) => {
+  const getRatingColor = (rating: number) => {
     if (rating >= 4.5) return 'success';
     if (rating >= 4.0) return 'info';
     if (rating >= 3.5) return 'warning';
     return 'danger';
   };
 
-  const getStatusBadge = (status) => {
-    const variants = {
+  const getStatusBadge = (status: string) => {
+    const variants: { [key: string]: string } = {
       'Completed': 'success',
       'Pending': 'warning',
       'In Progress': 'info'
@@ -204,7 +204,7 @@ const PerformanceManagement = () => {
       {/* Stats Cards */}
       <Row className="mb-4">
         <Col md={3} className="mb-3">
-          <Card className="border-0 shadow-sm stat-card">
+          <Card className="border-0 shadow-sm" style={{background: 'linear-gradient(135deg, #007bff 0%, #6610f2 100%)'}}>
             <Card.Body className="text-white">
               <div className="d-flex align-items-center">
                 <FaChartLine size={30} className="me-3 opacity-75" />
@@ -384,7 +384,7 @@ const PerformanceManagement = () => {
               </div>
               <div className="mb-3">
                 <div className="d-flex justify-content-between align-items-center mb-1">
-                  <span className="text-danger fw-medium">Needs Improvement (< 3.5)</span>
+                  <span className="text-danger fw-medium">Needs Improvement (&lt; 3.5)</span>
                   <span className="text-muted">0</span>
                 </div>
                 <ProgressBar now={0} variant="danger" style={{height: '8px'}} />
@@ -441,11 +441,11 @@ const PerformanceManagement = () => {
                   <div key={skill} className="mb-2">
                     <div className="d-flex justify-content-between mb-1">
                       <span className="text-capitalize">{skill}:</span>
-                      <span className="fw-medium">{rating}</span>
+                      <span className="fw-medium">{rating as number}</span>
                     </div>
                     <ProgressBar 
-                      now={(rating / 5) * 100} 
-                      variant={getRatingColor(rating)}
+                      now={((rating as number) / 5) * 100} 
+                      variant={getRatingColor(rating as number)}
                       style={{height: '6px'}}
                     />
                   </div>
